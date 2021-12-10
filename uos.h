@@ -3,8 +3,8 @@
 * @author 	mojinpan
 * @copyright (c) 2018 - 2020 mojinpan
 * @brief 	微型嵌入式操作系统
-* @version 	V0.6
-* @date 	2019-10-22
+* @version 	V0.9
+* @date 	2021-02-08
 * 
 * @par 功能说明
 * @details
@@ -24,14 +24,16 @@ extern  "C" {
 /*******************************************************************************
 							Macro Definition 宏定义
 *******************************************************************************/
-/// 配置部分
 #define OS_MAX_TASKS                8          //最大任务数量[1 - 8]
-#define OS_TMR_CFG_MAX              0          //定时器数量[0 - 255]
+#define OS_TMR_CFG_MAX              0          //可用软定时器数量
+#define OS_INT_PRIO                 5          //OS中断优先级,高于此优先级的中断可强占OS
 
 #define OS_USE_TQUE                            //开启任务队列的支持
 #define TQUE_MAX_TASK_NO            8          //任务队列数量
 #define TQUE_MAX_TASK_NODE_NUM      64         //任务节点数量
-/// 功能部分
+/*******************************************************************************
+							Macro Definition 宏定义
+*******************************************************************************/
 #define OS_STAT_RDY                 0x00u      //任务就绪
 
 #define OS_ERR_NONE                 0x00u      //无错误
@@ -39,11 +41,9 @@ extern  "C" {
 #define OS_ERR_NO_TMR               0x00u      //无可用定时器
 #define OS_ERR_TMR_IDX              0xFFFFFFFFu//定时器序号错误
 
-#define OS_ENTER_CRITICAL()     uint32_t cpu_sr;  {cpu_sr = OS_CPU_SR_Save();}
+#define OS_ENTER_CRITICAL()     uint32_t cpu_sr;{cpu_sr = OS_CPU_SR_Save();}
 #define OS_EXIT_CRITICAL()      {OS_CPU_SR_Restore(cpu_sr);}
-
-
-                            
+           
 /*******************************************************************************
 						    Type declaration 类型声明
 ********************************************************************************/       
@@ -73,6 +73,8 @@ typedef struct tque_task_node {
     void *ExecArg;                              ///< 执行参数
 } TQUE_TaskNode;
 
+
+extern volatile  unsigned int  OSTime;
 /*******************************************************************************
 							Function declaration 函数声明
 *******************************************************************************/
@@ -95,19 +97,9 @@ bool TqueTaskAdd(TQUE_TaskNode *task);
 bool TqueTaskDel(TQUE_TaskNode *task);
 void TqueTaskRun(uint8_t no);
 
-
-
-
-
 #ifdef __cplusplus
 }
 #endif
   
 #endif
-
-
-    }
-
-}
-
 
