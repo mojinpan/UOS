@@ -1,7 +1,7 @@
 # UOS: 基于UCOS的精简OS
 
-![version](https://img.shields.io/badge/version-0.6-brightgreen.svg)
-![build](https://img.shields.io/badge/build-2019.10.22-brightgreen.svg)
+![version](https://img.shields.io/badge/version-0.9-brightgreen.svg)
+![build](https://img.shields.io/badge/build-2021.02.08-brightgreen.svg)
 ![build](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 
 ## 1. 介绍
@@ -198,3 +198,14 @@ void Lv2Task(void)
 
 - V0.6 2019-10-22
   - 1.重写任务队列部分代码,支持动态加载,并简化操作
+
+- V0.7 2020-07-31
+  - 1.修改OSTaskStkInit()和PendSV_Handler(),调整浮点寄出去出栈和入栈的操作,修正开启FPU后会出现硬件错误的bug
+
+- V0.8 2021-01-30
+  - 1.将优先级改为从高到低,并启用CLZ(Count Leading Zeros)指令进行优先级查找,加速优先级查找并保证查找时间一致
+  - 
+- V0.9 2021-02-08
+  - 1.改写嵌汇编部分代码,使其能在AC6编译模式下耐受大部分编译等级(-O0除外)
+ 
+
